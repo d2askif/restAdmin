@@ -7,7 +7,7 @@ export const getNearByRestaurantRequest = async (
 ): Promise<any> => {
   const query = `query{
   getNearByRestaurants(input:{
-    location:{lat:2, lng:2},
+    location:{lng:23, lat:43},
     distance: 1000
   }){
     id
@@ -22,6 +22,6 @@ export const getNearByRestaurantRequest = async (
   }
 }`;
 
-  const response = await fetch(url, query, 'getNearByRestaurants');
+  const response = await fetch(url, { query }, 'getNearByRestaurants');
   return response;
 };

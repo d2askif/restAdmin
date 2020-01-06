@@ -1,3 +1,5 @@
+import fs, { createReadStream } from 'fs';
+
 import axios from 'axios';
 
 class ValidationError {
@@ -29,20 +31,21 @@ const responseAssembler = (result: DataFetchResult | null, action: string) => {
   return data;
 };
 
-export const fetch = async (url: string, query: any, action: string) => {
-  console.log({ query });
+export const fetch = async (
+  url: string,
+  query: any,
+  action: string,
+  headers: any = {}
+) => {
+  console.log(query);
+
   let result;
   try {
     result = await axios({
-      headers: {
-        processData: false,
-        contentType: false
-      },
-      url,
       method: 'post',
-      data: {
-        query
-      }
+      url,
+      headers,
+      data: query
     });
   } catch (e) {
     throw new Error(e);

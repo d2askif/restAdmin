@@ -15,6 +15,6 @@ export const DeleteRestaurantRequest = async (
     }
   }`;
 
-  const response = await fetch(url, query, 'deleteRestaurantWithId');
+  const response = await fetch(url, { query }, 'deleteRestaurantWithId');
   return response;
 };
