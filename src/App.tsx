@@ -10,20 +10,6 @@ import Routes from './route/Routes';
 import Navigation from '../src/components/Navigation';
 import theme from './theme';
 
-import { createUploadLink } from 'apollo-upload-client';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloProvider } from 'react-apollo';
-
-const link = createUploadLink({
-  uri: 'http://localhost:4000/graphql'
-});
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache()
-});
-
 const browserHistory = createBrowserHistory();
 const store = createStore();
 class App extends Component {
@@ -36,9 +22,7 @@ class App extends Component {
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <Router history={browserHistory}>
-              <ApolloProvider client={client}>
-                <Routes></Routes>
-              </ApolloProvider>
+              <Routes></Routes>
             </Router>
           </ThemeProvider>
         </Provider>
