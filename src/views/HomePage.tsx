@@ -19,6 +19,7 @@ import Paper from '@material-ui/core/Paper';
 interface Props {
   getAllRestaurants: () => Promise<[IRestaurant]>;
   deleteRestaurantWithId: (id: string) => Promise<any>;
+  isLoading: boolean;
   restaurants: [IRestaurant];
   notification: {
     open: boolean;
@@ -42,15 +43,15 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
     console.log('did mount');
   };
 
-  handelEdit = () => {
+  handelEdit = (id: string) => {
     console.log('handleEdit');
-    this.props.history.push('dashboard/new');
+    this.props.history.push(`dashboard/edit/${id}`);
   };
   handleDelete = async () => {
     const { deleteRestaurantWithId } = this.props;
     this.handleDismissAlert();
     await deleteRestaurantWithId(this.state.selectedId);
-    console.log('hanleDelete');
+    console.log('hanleDelete', deleteRestaurantWithId);
   };
   handleShowAlert = (id: string) => {
     this.setState({ ...this.state, showDialog: true, selectedId: id });
@@ -59,13 +60,16 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
     this.setState({ ...this.state, showDialog: false });
   };
 
+  handleOnCreateRestaurant = () => {
+    this.props.history.push('/dashboard/new');
+  };
+
   renderTable = () => {
-    const { restaurants, match } = this.props;
-    console.log({ match });
+    const { restaurants, isLoading } = this.props;
 
     return (
       <React.Fragment>
-        <CrudActions />
+        <CrudActions onCreateRestaurant={this.handleOnCreateRestaurant} />
         <SearchBox />
         <TableComponent
           onEdit={this.handelEdit}
@@ -76,6 +80,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
             phone: 'phone',
             location: 'location'
           }}
+          isLoading={isLoading}
           data={restaurants.map(item => ({
             id: item.id,
             name: item.name,
@@ -115,6 +120,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
 
 const mapStateProps = (state: any) => ({
   restaurants: state.appReducer.restaurants,
+  isLoading: state.appReducer.isLoading,
   notification: state.appReducer.notification
 });
 const mapDispatchToProps = (dispatch: Function) => ({

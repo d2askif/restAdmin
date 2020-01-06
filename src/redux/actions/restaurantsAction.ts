@@ -5,6 +5,10 @@ export const getRestaurantsAction = () => async (
   getState: Function
 ) => {
   try {
+    dispatch({
+      type: actionType.ALL_RESTAURANTS_LOADING,
+      payload: { isLoading: true }
+    });
     const response = await Service.getNearByRestaurants();
     console.log('getRestaurants', response);
 
@@ -13,6 +17,10 @@ export const getRestaurantsAction = () => async (
       payload: { restaurants: response }
     });
   } catch (e) {
+    dispatch({
+      type: actionType.ALL_RESTAURANTS_LOADING,
+      payload: { isLoading: false }
+    });
     console.log(e);
   }
 };
@@ -52,5 +60,15 @@ export const deleteWithIdAction = (id: string) => async (
         message: 'Restaurant deleting failed'
       }
     });
+    setTimeout(() => {
+      dispatch({
+        type: 'SHOW_NOTIFICATION',
+        payload: {
+          open: false,
+          variant: 'success',
+          message: 'Restaurant deleted'
+        }
+      });
+    }, 600);
   }
 };

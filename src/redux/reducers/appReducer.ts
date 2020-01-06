@@ -7,7 +7,11 @@ const setAllRestaurants = (state: any, payload: any) => {
   console.log({ newState });
 
   newState.restaurants = [...payload.restaurants];
-  return { ...newState, restaurants: [...payload.restaurants] };
+  return {
+    ...newState,
+    isLoading: false,
+    restaurants: [...payload.restaurants]
+  };
 };
 
 const deleteRestaurant = (state: any, payload: any) => {
@@ -27,6 +31,8 @@ const appReducer = (state: any, action: any) => {
   switch (action.type) {
     case 'test':
       return newState;
+    case actionTypes.ALL_RESTAURANTS_LOADING:
+      return { ...newState, isLoading: true };
     case actionTypes.ALL_RESTAURANTS:
       return setAllRestaurants(state, action.payload);
     case 'auth':

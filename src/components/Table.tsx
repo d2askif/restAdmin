@@ -12,12 +12,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 type T = { [key: string]: any };
 interface Props {
   header: T;
   data: T[];
+  isLoading: boolean;
   onDelete: (id: string) => void;
-  onEdit: () => void;
+  onEdit: (id: string) => void;
 }
 interface State {
   checked: boolean;
@@ -48,8 +51,71 @@ class TableComponent extends Component<Props, State> {
 
     onDelete(id);
   };
+
+  handleOnEdit = (index: number) => {
+    const { data, onEdit } = this.props;
+    const id = data[index].id;
+
+    onEdit(id);
+  };
+
+  renderProgress = () => {
+    return <CircularProgress />;
+  };
+
+  renderTableBody = () => {
+    const { data } = this.props;
+
+    return (
+      <TableBody>
+        {data.map((rows, index) => {
+          const isItemSelected = this.isSelected(index);
+          const labelId = `enhanced-table-checkbox-${index}`;
+
+          return (
+            <TableRow
+              hover
+              role='checkbox'
+              aria-checked={isItemSelected}
+              tabIndex={-1}
+              key={`row-key-${index}`}
+              selected={isItemSelected}
+            >
+              <TableCell padding='checkbox'>
+                <Checkbox
+                  checked={isItemSelected}
+                  onChange={event => this.handleClick(event, index)}
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </TableCell>
+              {Object.keys(rows).map((key, i) => {
+                return <TableCell key={`tbrc-${i}`}>{rows[key]}</TableCell>;
+              })}
+              <TableCell align='right'>
+                <IconButton>
+                  <VisibilityIcon color='primary' />
+                </IconButton>
+                <IconButton>
+                  <EditIcon
+                    color='primary'
+                    onClick={() => this.handleOnEdit(index)}
+                  />
+                </IconButton>
+                <IconButton
+                  color='primary'
+                  onClick={() => this.handleOnDelete(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    );
+  };
   render() {
-    const { header, data } = this.props;
+    const { header, data, isLoading } = this.props;
     return (
       <TableContainer component={Paper}>
         <Table>
@@ -71,48 +137,7 @@ class TableComponent extends Component<Props, State> {
               <TableCell align='right'>{''}</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data.map((rows, index) => {
-              const isItemSelected = this.isSelected(index);
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role='checkbox'
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={`row-key-${index}`}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={isItemSelected}
-                      onChange={event => this.handleClick(event, index)}
-                      inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  </TableCell>
-                  {Object.keys(rows).map((key, i) => {
-                    return <TableCell key={`tbrc-${i}`}>{rows[key]}</TableCell>;
-                  })}
-                  <TableCell align='right'>
-                    <IconButton>
-                      <VisibilityIcon color='primary' />
-                    </IconButton>
-                    <IconButton>
-                      <EditIcon color='primary' onClick={this.props.onEdit} />
-                    </IconButton>
-                    <IconButton
-                      color='primary'
-                      onClick={() => this.handleOnDelete(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+          {isLoading ? this.renderProgress() : this.renderTableBody()}
         </Table>
       </TableContainer>
     );
