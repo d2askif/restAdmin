@@ -58,7 +58,7 @@ class Products extends React.Component<Props & RouteComponentProps<{}>, State> {
     console.log('handleEdit');
     const { restaurants } = this.props;
     const id = restaurants[index].id;
-    this.props.history.push(`dashboard/edit/${id}`);
+    this.props.history.push(`product/edit/${id}`);
   };
 
   handleChecked = (indexes: number[]) => {

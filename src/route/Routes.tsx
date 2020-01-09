@@ -4,6 +4,7 @@ import HomePage from '../views/Home/HomePage';
 import DetailView from '../views/Home/DetailView';
 import SignIn from '../views/SignIn/SignInPage';
 import EditRestaurant from '../views/EditRestaurant/editRestaurant';
+import ProductEdit from '../views/Products/ProductEdit';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRouter } from './PublicRoute';
 import { connect } from 'react-redux';
@@ -70,6 +71,13 @@ const Routes = ({ isAuthenticated }: Props) => {
         path={'/new'}
         exact
       />
+
+      <RouteWithLayout
+        layout={MainLayout}
+        exact
+        path={'/product/edit/:id'}
+        component={ProductEdit}
+      ></RouteWithLayout>
       <RouteWithLayout
         layout={MainLayout}
         exact
