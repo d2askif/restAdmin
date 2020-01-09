@@ -13,14 +13,27 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Styled from 'styled-components';
+import Avatar from '@material-ui/core/Avatar';
+
+const Styles = Styled.div`
+   display: flex;
+   flex: 1;
+   padding:16px;
+   width: 80Vw;
+   justify-content: center;
+
+`;
 
 type T = { [key: string]: any };
 interface Props {
   header: T;
   data: T[];
   isLoading: boolean;
-  onDelete: (id: string) => void;
-  onEdit: (id: string) => void;
+  onDelete: (index: number) => void;
+  onEdit: (index: number) => void;
+  onChecked: (indexes: number[]) => void;
+  onDetailView: (indexes: number) => void;
 }
 interface State {
   checked: boolean;
@@ -33,13 +46,24 @@ class TableComponent extends Component<Props, State> {
   };
 
   handleChecked = (name: string) => (event: any) => {
+    this.handleSelectAll(event);
     this.setState({ checked: event.target.checked });
   };
   handleClick = (event: any, rowNumber: number) => {
     const selectedRows = [...this.state.selected];
     const index = selectedRows.findIndex(val => val === rowNumber);
     index !== -1 ? selectedRows.splice(index, 1) : selectedRows.push(rowNumber);
-    this.setState({ ...this.state, selected: selectedRows });
+
+    if (!event.target.checked) {
+      this.setState({ checked: event.target.checked });
+    }
+
+    this.setState(
+      prevState => ({ ...prevState, selected: selectedRows }),
+      () => {
+        this.props.onChecked(this.state.selected);
+      }
+    );
   };
   isSelected = (index: number): boolean => {
     return this.state.selected.findIndex(val => val === index) !== -1;
@@ -47,20 +71,38 @@ class TableComponent extends Component<Props, State> {
 
   handleOnDelete = (index: number) => {
     const { data, onDelete } = this.props;
-    const id = data[index].id;
 
-    onDelete(id);
+    onDelete(index);
   };
 
   handleOnEdit = (index: number) => {
     const { data, onEdit } = this.props;
-    const id = data[index].id;
 
-    onEdit(id);
+    onEdit(index);
+  };
+
+  handleSelectAll = (event: any) => {
+    console.log(event);
+
+    const { data } = this.props;
+    let newSelected: number[] = [];
+    if (event.target.checked) {
+      newSelected = data.map((_, index) => index);
+    }
+    this.setState(
+      prevState => ({ ...prevState, selected: newSelected }),
+      () => {
+        this.props.onChecked(this.state.selected);
+      }
+    );
   };
 
   renderProgress = () => {
-    return <CircularProgress />;
+    return (
+      <Styles>
+        <CircularProgress />
+      </Styles>
+    );
   };
 
   renderTableBody = () => {
@@ -88,12 +130,25 @@ class TableComponent extends Component<Props, State> {
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               </TableCell>
+
               {Object.keys(rows).map((key, i) => {
+                if (key === 'url') {
+                  console.log({ key });
+
+                  return (
+                    <TableCell>
+                      <Avatar src={rows[key]} variant='square' />
+                    </TableCell>
+                  );
+                }
                 return <TableCell key={`tbrc-${i}`}>{rows[key]}</TableCell>;
               })}
               <TableCell align='right'>
                 <IconButton>
-                  <VisibilityIcon color='primary' />
+                  <VisibilityIcon
+                    color='primary'
+                    onClick={() => this.props.onDetailView(index)}
+                  />
                 </IconButton>
                 <IconButton>
                   <EditIcon
@@ -115,7 +170,7 @@ class TableComponent extends Component<Props, State> {
     );
   };
   render() {
-    const { header, data, isLoading } = this.props;
+    const { header, isLoading } = this.props;
     return (
       <TableContainer component={Paper}>
         <Table>
