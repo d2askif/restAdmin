@@ -24,7 +24,7 @@ const deleteRestaurant = (state: any, payload: any) => {
     restaurants: restaurants.filter((restaurant: any) => restaurant.id !== id)
   };
 };
-const appReducer = (state: any, action: any) => {
+const appReducer = (state: any = {}, action: any) => {
   console.log('acion', action);
 
   const newState = { ...state };
@@ -43,7 +43,7 @@ const appReducer = (state: any, action: any) => {
       return deleteRestaurant(state, action.payload);
 
     default:
-      return newState;
+      return state;
   }
 };
 export default appReducer;

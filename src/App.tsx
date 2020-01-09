@@ -9,9 +9,10 @@ import { Router } from 'react-router-dom';
 import Routes from './route/Routes';
 import Navigation from '../src/components/Navigation';
 import theme from './theme';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const browserHistory = createBrowserHistory();
-const store = createStore();
+const { store, persistor } = createStore();
 class App extends Component {
   render() {
     return (
@@ -22,7 +23,9 @@ class App extends Component {
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <Router history={browserHistory}>
-              <Routes></Routes>
+              <PersistGate loading={null} persistor={persistor}>
+                <Routes></Routes>
+              </PersistGate>
             </Router>
           </ThemeProvider>
         </Provider>
