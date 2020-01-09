@@ -4,6 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ExportIcon from '@material-ui/icons/ImportExportRounded';
+
+import AddIcon from '@material-ui/icons/Add';
+
 import UndoIcon from '@material-ui/icons/Undo';
 const useStyles = makeStyles(theme => ({
   container: {
@@ -22,7 +27,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CrudActions(props: any) {
+interface Props {
+  onCreateRestaurant: () => void;
+  onDeleteMultiple: () => void;
+  deleteActive: boolean;
+}
+
+function CrudActions(props: Props) {
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -30,26 +41,29 @@ function CrudActions(props: any) {
         variant='contained'
         color='primary'
         className={classes.button}
-        startIcon={<SearchIcon />}
+        startIcon={<AddIcon />}
+        onClick={props.onCreateRestaurant}
       >
-        Search
+        New
       </Button>
 
-      <Button
-        variant='text'
-        color='default'
-        className={classes.button}
-        startIcon={<UndoIcon />}
-      >
-        Reset
-      </Button>
       <Button
         variant='contained'
         color='primary'
         className={classes.button}
-        startIcon={<SearchIcon />}
+        startIcon={<ExportIcon />}
       >
-        Search
+        Export
+      </Button>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={props.onDeleteMultiple}
+        disabled={!props.deleteActive}
+        className={classes.button}
+        startIcon={<DeleteIcon />}
+      >
+        Delete
       </Button>
 
       <Button
