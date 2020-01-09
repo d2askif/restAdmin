@@ -4,8 +4,10 @@ export const CreateNewRestaurantRequest = async (
   url: string,
   data: any
 ): Promise<any> => {
-  const query = `mutation {
+  const q = {
+    query: `mutation ($file: Upload!) {
     createRestaurant(input:{
+        file:$file,
         name:"${data.name}",
         minOrder:${data.minOrder},
         deliveryPrice:${data.deliveryPrice},
@@ -20,8 +22,25 @@ export const CreateNewRestaurantRequest = async (
       }
      
     }
-  }`;
+  }`,
+    variables: {
+      file: null
+    }
+  };
+  let map = {
+    '0': ['variables.file']
+  };
+  let query = new FormData();
+  query.append('operations', JSON.stringify(q));
+  query.append('map', JSON.stringify(map));
 
-  const response = await fetch(url, query, 'getNearByRestaurants');
+  query.append('0', data.file);
+
+  const headers = {
+    'Content-Type': 'multipart/form-data'
+  };
+  console.log(q);
+
+  const response = await fetch(url, query, 'createRestaurant', headers);
   return response;
 };

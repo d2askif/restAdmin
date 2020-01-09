@@ -19,6 +19,7 @@ export const getNearByRestaurantRequest = async (
     minOrder
     open
     active
+    url
   }
 }`;
 

@@ -11,6 +11,7 @@ export interface IRestaurant {
   phoneNumber: number;
   address: string;
   active: boolean;
+  url: string;
 }
 export interface IFoodMenu {
   name: string;

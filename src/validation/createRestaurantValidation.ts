@@ -57,12 +57,25 @@ export const PasswordConstraints = {
 };
 
 export const LatConstraints = {
-  password: {
-    numericality: {
-      greaterThan: 0,
-      lessThanOrEqualTo: 30,
+  lat: {
+    length: {
+      minimum: 2,
+      maximum: 30,
       message() {
         return 'you should enter a valid lat';
+      }
+    },
+    presence: true
+  }
+};
+
+export const LngConstraints = {
+  lng: {
+    length: {
+      minimum: 2,
+      maximum: 30,
+      message() {
+        return 'you should enter a valid lng';
       }
     },
     presence: true
@@ -145,12 +158,27 @@ export function ValidateLat(value: string): string | null {
   return null;
 }
 
+export function ValidateLng(value: string): string | null {
+  const result = validatejs({ lng: value }, LngConstraints, {
+    fullMessages: false
+  });
+  if (result) {
+    return result.lng[0];
+  }
+
+  return null;
+}
+
+export function validateUpload(value: string): string | null {
+  return null;
+}
+
 interface ValidationType {
   [key: string]: (value: string) => string | null;
 }
 const validation: ValidationType = {
   lat: ValidateLat,
-  lng: ValidateLat,
+  lng: ValidateLng,
   name: validateFirstName,
   lastName: validateLastName,
   owner: validateFirstName,
@@ -158,8 +186,9 @@ const validation: ValidationType = {
   subCity: validateFirstName,
   kebele: validateFirstName,
   status: validateFirstName,
-  phoneNumber: validateFirstName,
-  address: validateFirstName
+  phone: validateFirstName,
+  address: validateFirstName,
+  upload: validateUpload
 };
 
 export default validation;

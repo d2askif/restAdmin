@@ -1,19 +1,19 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { IRestaurant } from '../types/restaurantTypes';
+import { IRestaurant } from '../../types/restaurantTypes';
 import { connect } from 'react-redux';
 import {
   getRestaurantsAction,
   deleteWithIdAction
-} from '../redux/actions/restaurantsAction';
+} from '../../redux/actions/restaurantsAction';
 import { RouteComponentProps, withRouter, Route } from 'react-router-dom';
-import TableComponent from '../components/Table';
-import LoggedUser from '../components/LoggedUser';
-import CustomSnackBar from '../components/Snackbar';
-import Alert from '../components/Alert';
-import SearchBox from '../components/SearchBox';
-import CrudActions from '../components/CrudActions';
-import Title from '../components/Title';
+import TableComponent from '../../components/Table';
+import LoggedUser from '../../components/LoggedUser';
+import CustomSnackBar from '../../components/Snackbar';
+import Alert from '../../components/Alert';
+import SearchBox from '../../components/SearchBox';
+import CrudActions from '../../components/CrudActions';
+import Title from '../../components/Title';
 import Paper from '@material-ui/core/Paper';
 
 interface Props {
@@ -28,8 +28,19 @@ interface Props {
   };
 }
 
-class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
-  state = { showDialog: false, restaurants: [], selectedId: '' };
+interface State {
+  showDialog: boolean;
+  restaurants: any;
+  selectedId: number;
+  checked: number[];
+}
+class Products extends React.Component<Props & RouteComponentProps<{}>, State> {
+  state: State = {
+    showDialog: false,
+    restaurants: [],
+    selectedId: -1,
+    checked: []
+  };
 
   componentWillMount = () => {
     console.log('will mount');
@@ -43,18 +54,27 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
     console.log('did mount');
   };
 
-  handelEdit = (id: string) => {
+  handelEdit = (index: number) => {
     console.log('handleEdit');
+    const { restaurants } = this.props;
+    const id = restaurants[index].id;
     this.props.history.push(`dashboard/edit/${id}`);
   };
+
+  handleChecked = (indexes: number[]) => {
+    this.setState({ ...this.state, checked: [...indexes] });
+  };
+
+  handleMultipleDelete = () => {};
+
   handleDelete = async () => {
-    const { deleteRestaurantWithId } = this.props;
+    const { deleteRestaurantWithId, restaurants } = this.props;
     this.handleDismissAlert();
-    await deleteRestaurantWithId(this.state.selectedId);
+    await deleteRestaurantWithId(restaurants[this.state.selectedId].id);
     console.log('hanleDelete', deleteRestaurantWithId);
   };
-  handleShowAlert = (id: string) => {
-    this.setState({ ...this.state, showDialog: true, selectedId: id });
+  handleShowAlert = (index: number) => {
+    this.setState({ ...this.state, showDialog: true, selectedId: index });
   };
   handleDismissAlert = () => {
     this.setState({ ...this.state, showDialog: false });
@@ -64,25 +84,38 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
     this.props.history.push('/dashboard/new');
   };
 
+  handleOnDetailView = (index: number) => {
+    const { restaurants } = this.props;
+    const id = restaurants[index].id;
+    this.props.history.push(`dashboard/${id}`);
+  };
+
   renderTable = () => {
     const { restaurants, isLoading } = this.props;
 
     return (
       <React.Fragment>
-        <CrudActions onCreateRestaurant={this.handleOnCreateRestaurant} />
+        <CrudActions
+          onCreateRestaurant={this.handleOnCreateRestaurant}
+          onDeleteMultiple={this.handleMultipleDelete}
+          deleteActive={this.state.checked.length > 0}
+        ></CrudActions>
+
         <SearchBox />
         <TableComponent
+          onDetailView={this.handleOnDetailView}
           onEdit={this.handelEdit}
           onDelete={this.handleShowAlert}
+          onChecked={this.handleChecked}
           header={{
-            id: 'id',
+            avatar: 'Picture',
             name: 'name',
             phone: 'phone',
             location: 'location'
           }}
           isLoading={isLoading}
           data={restaurants.map(item => ({
-            id: item.id,
+            url: item.url,
             name: item.name,
             phone: item.phoneNumber,
             location: item.location
@@ -93,7 +126,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>> {
   };
 
   render() {
-    const { notification, match } = this.props;
+    const { notification } = this.props;
     return (
       <Container
         component={Paper}
@@ -129,4 +162,4 @@ const mapDispatchToProps = (dispatch: Function) => ({
   deleteRestaurantWithId: async (id: string): Promise<any> =>
     dispatch(deleteWithIdAction(id))
 });
-export default withRouter(connect(mapStateProps, mapDispatchToProps)(HomePage));
+export default withRouter(connect(mapStateProps, mapDispatchToProps)(Products));

@@ -6,12 +6,33 @@ export const SingleFileUploadRequest = async (
 ): Promise<any> => {
   console.log(file);
 
-  const query = `mutation{
-  singleUpload(file:${file}){
-    ...on File {filename}
-  }
-}`;
+  console.log(file);
 
-  const response = await fetch(url, query, 'singleUpload');
+  let o = {
+    query: `mutation ($file: Upload!) {
+    singleUpload (file: $file){
+      ...on File {
+        filename
+      }
+    }
+  }`,
+    variables: {
+      file: null
+    }
+  };
+
+  let map = {
+    '0': ['variables.file']
+  };
+  let query = new FormData();
+  query.append('operations', JSON.stringify(o));
+  query.append('map', JSON.stringify(map));
+
+  query.append('0', file);
+
+  const headers = {
+    'Content-Type': 'multipart/form-data'
+  };
+  const response = await fetch(url, query, 'singleUpload', headers);
   return response;
 };

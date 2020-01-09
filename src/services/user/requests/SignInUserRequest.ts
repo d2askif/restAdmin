@@ -24,7 +24,7 @@ export const signInUserRequest = async (
   }
 }`;
 
-  const response = await fetch(url, query, 'signIn');
+  const response = await fetch(url, { query }, 'signIn');
   console.log('response', response);
 
   return response;

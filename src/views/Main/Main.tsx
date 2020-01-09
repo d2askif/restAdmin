@@ -44,6 +44,8 @@ const Main = (props: any) => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
+  console.log('main props', props);
+
   return (
     <div
       className={clsx({
@@ -56,7 +58,13 @@ const Main = (props: any) => {
         open={shouldOpenSidebar}
         variant={isDesktop ? 'persistent' : 'temporary'}
       />
-      <main className={classes.content}>{children}</main>
+
+      <main className={classes.content}>
+        <div>
+          <div>{'DD'}</div>
+          {children}
+        </div>
+      </main>
     </div>
   );
 };

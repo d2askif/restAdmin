@@ -45,16 +45,17 @@ export const submitForm = () => async (dispatch: any, getState: Function) => {
     name: form.name.value,
     owner: form.owner.value,
     city: form.city.value,
-    subCity: form.subCity.value,
-    kebele: form.kebele.value,
-    type: form.type.value,
-    active: form.active.value,
+    subCity: 'form.subCity.value',
+    kebele: 'form.kebele.value',
+    type: 'form.type.value',
+    active: 'form.active.value',
     minOrder: 2,
     deliveryPrice: 12,
     rating: 12,
     address: form.address.value,
-    phoneNumber: form.phoneNumber.value,
-    location: { lat: 2, lng: 2 }
+    phoneNumber: form.phone.value,
+    file: form.upload.value,
+    location: { lat: form.lat.value, lng: form.lng.value }
   };
   try {
     const response = await Service.createRestaurant(data);

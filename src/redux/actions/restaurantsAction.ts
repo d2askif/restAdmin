@@ -10,7 +10,6 @@ export const getRestaurantsAction = () => async (
       payload: { isLoading: true }
     });
     const response = await Service.getNearByRestaurants();
-    console.log('getRestaurants', response);
 
     dispatch({
       type: actionType.ALL_RESTAURANTS,
@@ -21,7 +20,6 @@ export const getRestaurantsAction = () => async (
       type: actionType.ALL_RESTAURANTS_LOADING,
       payload: { isLoading: false }
     });
-    console.log(e);
   }
 };
 

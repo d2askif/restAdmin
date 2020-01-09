@@ -8,17 +8,24 @@ const useStyles = makeStyles(theme => ({
     margin: '32px 0 48px 0'
   }
 }));
-function Title(props: any) {
+
+interface Props {
+  title?: string;
+}
+function Title(props: Props) {
+  const { title } = props;
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <Typography variant='h2' component='h2'>
-        Dashboard
+        {title}
       </Typography>
     </div>
   );
 }
 
-Title.propTypes = {};
+Title.propTypes = {
+  title: 'title'
+};
 
 export default Title;
