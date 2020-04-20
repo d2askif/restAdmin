@@ -101,7 +101,7 @@ class Products extends React.Component<Props & RouteComponentProps<{}>, State> {
           deleteActive={this.state.checked.length > 0}
         ></CrudActions>
 
-        <SearchBox />
+        <SearchBox onSearch={(p: { [key: string]: string }) => {}} />
         <TableComponent
           onDetailView={this.handleOnDetailView}
           onEdit={this.handelEdit}

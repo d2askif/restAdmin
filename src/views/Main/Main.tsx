@@ -60,10 +60,7 @@ const Main = (props: any) => {
       />
 
       <main className={classes.content}>
-        <div>
-          <div>{'DD'}</div>
-          {children}
-        </div>
+        <div>{children}</div>
       </main>
     </div>
   );

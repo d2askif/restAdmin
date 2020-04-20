@@ -90,6 +90,8 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
     this.props.history.push(`dashboard/${id}`);
   };
 
+  handleSearch = (params: { [key: string]: string }) => {};
+
   renderTable = () => {
     const { restaurants, isLoading } = this.props;
 
@@ -101,7 +103,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
           deleteActive={this.state.checked.length > 0}
         ></CrudActions>
 
-        <SearchBox />
+        <SearchBox onSearch={this.handleSearch} />
         <TableComponent
           onDetailView={this.handleOnDetailView}
           onEdit={this.handelEdit}
@@ -111,14 +113,16 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
             avatar: 'Picture',
             name: 'name',
             phone: 'phone',
-            location: 'location'
+            address: 'address',
+            rating: 'rating'
           }}
           isLoading={isLoading}
           data={restaurants.map(item => ({
             url: item.url,
             name: item.name,
             phone: item.phoneNumber,
-            location: item.location
+            address: item.address,
+            rating: item.rating
           }))}
         ></TableComponent>
       </React.Fragment>

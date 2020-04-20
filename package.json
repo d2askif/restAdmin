@@ -62,6 +62,7 @@
     "@types/react-router-dom": "^5.1.2",
     "@types/recompose": "^0.30.7",
     "@types/styled-components": "^4.4.1",
+    "apollo": "^2.21.2",
     "node-sass": "^4.13.0",
     "redux-logger": "^3.0.6",
     "sass-loader": "^8.0.0"

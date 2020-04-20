@@ -17,7 +17,7 @@ import {
   withStyles,
   WithStyles,
   Theme,
-  createStyles
+  createStyles,
 } from '@material-ui/core/styles';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ import {
   passwordUpdate,
   emailLeaving,
   emailUpdate,
-  signIn
+  signIn,
 } from '../../redux/actions/signInActions';
 
 function Copyright() {
@@ -47,19 +47,19 @@ const styles = (theme: Theme) =>
       marginTop: theme.spacing(8),
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.secondary.main,
     },
     form: {
       width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
     },
     submit: {
-      margin: theme.spacing(3, 0, 2)
-    }
+      margin: theme.spacing(3, 0, 2),
+    },
   });
 
 interface Props {
@@ -93,7 +93,7 @@ class SignIn extends React.Component<IProps> {
       onPasswordLeaving,
       onPasswordUpdate,
       password,
-      classes
+      classes,
     } = this.props;
 
     return (
@@ -115,10 +115,10 @@ class SignIn extends React.Component<IProps> {
               id='email'
               label='Email Address'
               name='email'
-              autoComplete='email'
+              autoComplete='none'
               autoFocus
               onBlur={onEmailLeaving}
-              onChange={event => onEmailUpdate(event.target.value)}
+              onChange={(event) => onEmailUpdate(event.target.value)}
               value={signIn.email.value}
             />
             <TextField
@@ -132,13 +132,14 @@ class SignIn extends React.Component<IProps> {
               id='password'
               autoComplete='current-password'
               onBlur={onPasswordLeaving}
-              onChange={event => onPasswordUpdate(event.target.value)}
+              onChange={(event) => onPasswordUpdate(event.target.value)}
               value={password}
             />
             <FormControlLabel
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
             />
+
             <Button
               onClick={this.handleSignIn}
               fullWidth
@@ -178,7 +179,7 @@ const getSignIn = (state: any) => {
 const mapStateToProps = (state: any) => ({
   signIn: getSignIn(state),
   email: state.form.signIn.email.value,
-  password: state.form.signIn.password.value
+  password: state.form.signIn.password.value,
 });
 const mapDispatchToProps = (dispatch: any) => ({
   onPasswordLeaving: () => {
@@ -195,7 +196,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   onSignin: (): Promise<boolean> => {
     return dispatch(signIn());
-  }
+  },
 });
 
 export default withRouter(

@@ -3,12 +3,18 @@ import { getRestaurantMenusRequest } from './requests/GetRestaurantMenus';
 import { CreateNewRestaurantRequest } from './requests/CreateNewRestaurant';
 import { DeleteRestaurantRequest } from './requests/DeleteRestaurantWithId';
 import { SingleFileUploadRequest } from './requests/SingleFileUploadRequest';
+import { getRestaurantRequest } from './requests/GetRestaurantsRequest';
 
 export const url = 'http://localhost:4000/graphql';
 
 export const getNearByRestaurants = async (): Promise<any> => {
   const response = await getNearByRestaurantRequest(url);
 
+  return response;
+};
+
+export const getRestaurants = async (params: { [key: string]: any }) => {
+  const response = await getRestaurantRequest(url, params);
   return response;
 };
 
@@ -20,8 +26,6 @@ export const getRestaurantMenus = async (id: string): Promise<any> => {
 };
 
 export const createRestaurant = async (data: any): Promise<any> => {
-  console.log({ data });
-
   const response = await CreateNewRestaurantRequest(url, data);
   return response;
 };
