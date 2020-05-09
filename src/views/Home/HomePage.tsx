@@ -4,7 +4,7 @@ import { IRestaurant } from '../../types/restaurantTypes';
 import { connect } from 'react-redux';
 import {
   getRestaurantsAction,
-  deleteWithIdAction
+  deleteWithIdAction,
 } from '../../redux/actions/restaurantsAction';
 import { RouteComponentProps, withRouter, Route } from 'react-router-dom';
 import TableComponent from '../../components/Table';
@@ -15,6 +15,7 @@ import SearchBox from '../../components/SearchBox';
 import CrudActions from '../../components/CrudActions';
 import Title from '../../components/Title';
 import Paper from '@material-ui/core/Paper';
+import FormDialog from '../../components/Dialog/FormDialog';
 
 interface Props {
   getAllRestaurants: () => Promise<[IRestaurant]>;
@@ -39,7 +40,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
     showDialog: false,
     restaurants: [],
     selectedId: -1,
-    checked: []
+    checked: [],
   };
 
   componentWillMount = () => {
@@ -80,9 +81,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
     this.setState({ ...this.state, showDialog: false });
   };
 
-  handleOnCreateRestaurant = () => {
-    this.props.history.push('/dashboard/new');
-  };
+  handleOnCreateRestaurant = () => {};
 
   handleOnDetailView = (index: number) => {
     const { restaurants } = this.props;
@@ -97,6 +96,7 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
 
     return (
       <React.Fragment>
+        <FormDialog open={false} />
         <CrudActions
           onCreateRestaurant={this.handleOnCreateRestaurant}
           onDeleteMultiple={this.handleMultipleDelete}
@@ -114,15 +114,15 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
             name: 'name',
             phone: 'phone',
             address: 'address',
-            rating: 'rating'
+            rating: 'rating',
           }}
           isLoading={isLoading}
-          data={restaurants.map(item => ({
+          data={restaurants.map((item) => ({
             url: item.url,
             name: item.name,
             phone: item.phoneNumber,
             address: item.address,
-            rating: item.rating
+            rating: item.rating,
           }))}
         ></TableComponent>
       </React.Fragment>
@@ -158,12 +158,12 @@ class HomePage extends React.Component<Props & RouteComponentProps<{}>, State> {
 const mapStateProps = (state: any) => ({
   restaurants: state.appReducer.restaurants,
   isLoading: state.appReducer.isLoading,
-  notification: state.appReducer.notification
+  notification: state.appReducer.notification,
 });
 const mapDispatchToProps = (dispatch: Function) => ({
   getAllRestaurants: async (): Promise<[IRestaurant]> =>
     dispatch(getRestaurantsAction()),
   deleteRestaurantWithId: async (id: string): Promise<any> =>
-    dispatch(deleteWithIdAction(id))
+    dispatch(deleteWithIdAction(id)),
 });
 export default withRouter(connect(mapStateProps, mapDispatchToProps)(HomePage));

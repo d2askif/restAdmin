@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import createStore from '../src/redux/store';
 
 import './assets/scss/index.scss';
-import { Router } from 'react-router-dom';
+import { Router, BrowserRouter, HashRouter } from 'react-router-dom';
 import Routes from './route/Routes';
 import Navigation from '../src/components/Navigation';
 import theme from './theme';
@@ -17,16 +17,16 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <Router history={browserHistory}>
+        <HashRouter>
           <Navigation></Navigation>
-        </Router>
+        </HashRouter>
         <Provider store={store}>
           <ThemeProvider theme={theme}>
-            <Router history={browserHistory}>
+            <HashRouter>
               <PersistGate loading={null} persistor={persistor}>
                 <Routes></Routes>
               </PersistGate>
-            </Router>
+            </HashRouter>
           </ThemeProvider>
         </Provider>
       </React.Fragment>
