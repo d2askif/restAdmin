@@ -95,7 +95,7 @@
     "@types/styled-components": "^4.4.1",
     "apollo": "^2.21.2",
     "concurrently": "^5.2.0",
-    "electron": "^8.2.3",
+    "electron": "^11.5.0",
     "electron-builder": "^22.5.1",
     "node-sass": "^4.13.0",
     "redux-logger": "^3.0.6",
