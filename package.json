@@ -97,7 +97,7 @@
     "concurrently": "^5.2.0",
     "electron": "^8.2.3",
     "electron-builder": "^22.5.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "redux-logger": "^3.0.6",
     "sass-loader": "^8.0.0",
     "wait-on": "^4.0.2"
